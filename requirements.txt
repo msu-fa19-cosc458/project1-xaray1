@@ -1,0 +1,6 @@
+Flask
+requests
+random
+os
+tweepy
+son
