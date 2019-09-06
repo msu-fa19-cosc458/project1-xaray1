@@ -25,9 +25,8 @@
     }
     .center {
          text-align:center
-        
     }
-    a  {
+    a   {
         text-align:center;
     }
   </style>
@@ -35,7 +34,7 @@
         <h1 style="font-size:60px;">KidCudi</h1>
         <h2 style="font-size:40px:">{{song_name}}</h2>
         <img src={{ image }} width="500" height="600" ></img>
-        <a style="color:black; font-size:40px" href={{artisturl}}>Kid Cudi Link To Genius Page</a>
+        <a style="color:black; font-size:40px text-align:center" href={{artisturl}}>Kid Cudi Link To Genius Page</a>
         
         {% for tweet in tweetset %}
           <p>"{{ tweet }}"</p>
