@@ -1,8 +1,11 @@
 import flask, random
 import os, tweepy
 import requests, json
-                
-url = "https://api.genius.com/search?q=Kendrick%20Lamar"
+
+app = flask.Flask(__name__)
+
+url = "https://api.genius.com/search?q=Kid%20Cudi"
+artisturl = "https://genius.com/artists/KidCudi"
     
 my_header = {
     "Authorization": "Bearer FAgfzFh7SC0OjSo3f1W-tsr4UkaanvH5mrXEx_Ay3i9ZXrZcxt2df5bRDzxrDDnX"
@@ -23,32 +26,33 @@ info = response.json()
 genius_hits = info["response"]["hits"]
 ranint = random.randint(0,len(genius_hits)-1)
 song = genius_hits[ranint]
-print(song["result"]["header_image_url"])
-#print(song["image_url"])
+print(json.dumps(song,indent=2))
 
-    
+
 def grabTweets():
+    tweetset = set()
     cnt = 0
-    for tweet in api.search("@father"):
-        print(tweet.text)
+    for tweet in api.search("@KidCudi"):
+        tweetset.add(tweet.text)
         cnt += 1
         if cnt == 10:
             break
-    return None
+    return list(tweetset)
     
 def grabArt():
-    return None
+    image = (song["result"]["header_image_url"])
+    songname = (song["result"]["title"])
+    return image
 
-app = flask.Flask(__name__)
 
-@app.route('/Father')
+@app.route('/')
 def render(): 
-    grabTweets()
-    return flask.render_template("structure.html",image = song["result"]["header_image_url"])
+    tweets = grabTweets()
+    
+    return flask.render_template("structure.html",image = song["result"]["header_image_url"],
+    tweetset=tweets,artisturl = "https://genius.com/artists/KidCudi",songname = (song["result"]["title"]))
     
 app.run(
     port = int(os.getenv('PORT',8080)),
     host = os.getenv('IP', '0.0.0.0')
     )
-    
-

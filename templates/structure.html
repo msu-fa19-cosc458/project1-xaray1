@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
   </head>
@@ -5,11 +6,30 @@
     body {  
         background-color: purple
     }
+    img {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    h1  {
+        text-align: center;
+    }
+    h2  { 
+        text-align: center;   
+    }
+    ul  {
+        text-align:center;
+    }
   </style>
   <body>
-      <h> Hello, World</h>
-      <img src= <% image %>    </img>
+        <h1 style="font-size:60px;">KidCudi</h1>
+        <h2 style="font-size:40px:">{{songname}}</h2>
+        <img src={{ image }} width="500" height="600" ></img>
+        <a style="color:black; font-size:40px" href={{artisturl}}>Kid Cudi Link To Genius Page</a>
+        https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+        {% for tweet in tweetset %}
+          <p>"{{ tweet }}"</p>
+        {% endfor %}
+        
       
- <!-- We need to add something here-->
   </body>
 </html>
