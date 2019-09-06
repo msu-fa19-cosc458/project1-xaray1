@@ -8,49 +8,49 @@ url = "https://api.genius.com/search?q=Kid%20Cudi"
 artisturl = "https://genius.com/artists/KidCudi"
     
 my_header = {
-    "Authorization": "Bearer FAgfzFh7SC0OjSo3f1W-tsr4UkaanvH5mrXEx_Ay3i9ZXrZcxt2df5bRDzxrDDnX"
+    "Authorization": os.getenv("Authorization")
 }
 
 oauth = tweepy.OAuthHandler(
-    "RMYP8WqHLa8TFlRaeqL9x23C8",
-    "KAZt85Y2G1cYyeykMWh1t5FlHxlLg8NpweCZABlnDQu7Q9N22F"
+    os.getenv("APIKEY"),
+    os.getenv("APISECRET")
     )
 oauth.set_access_token(
-    "1166769097947918337-3lyxumne3ePs0RpvYtoFOJS95WGjgn",
-    "VaSbrKKCzGITwO7sp7abjnRQFvulugbsjUyV9ULiE4wQv"
+    os.getenv("ACCESSTOKEN"),
+    os.getenv("ACCESSKEY")
     ) 
     
 api = tweepy.API(oauth)
 response = requests.get(url, headers=my_header)
-info = response.json()
-genius_hits = info["response"]["hits"]
-ranint = random.randint(0,len(genius_hits)-1)
-song = genius_hits[ranint]
-print(json.dumps(song,indent=2))
+
+def randomize():
+    info = response.json()
+    genius_hits = info["response"]["hits"]
+    ranint = random.randint(0,len(genius_hits)-1)
+    song = genius_hits[ranint]
+    return song
 
 
 def grabTweets():
     tweetset = set()
-    cnt = 0
-    for tweet in api.search("@KidCudi"):
-        tweetset.add(tweet.text)
-        cnt += 1
-        if cnt == 10:
-            break
+    x = api.search("@KidCudi")
+    for tweet in range(0,9):
+        tweetset.add(random.choice(x).text)
     return list(tweetset)
     
-def grabArt():
-    image = (song["result"]["header_image_url"])
-    songname = (song["result"]["title"])
+def grabImage(song):
+    image = song["result"]["header_image_url"]
     return image
 
+def grabSong(song):
+    song_name = song["result"]["title"]
+    return song_name
 
 @app.route('/')
 def render(): 
-    tweets = grabTweets()
-    
-    return flask.render_template("structure.html",image = song["result"]["header_image_url"],
-    tweetset=tweets,artisturl = "https://genius.com/artists/KidCudi",songname = (song["result"]["title"]))
+    song = randomize()
+    return flask.render_template("structure.html",image = grabImage(song),
+    tweetset = grabTweets(),artisturl = "https://genius.com/artists/KidCudi",song_name = grabSong(song))
     
 app.run(
     port = int(os.getenv('PORT',8080)),
